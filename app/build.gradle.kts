@@ -36,6 +36,9 @@ android {
 }
 
 dependencies {
+    // Modules
+    implementation(project(":core"))
+
     // Main
     implementation(Dependencies.appcompat)
     implementation(Dependencies.material)

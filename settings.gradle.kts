@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Satellite Demo"
 include(":app")
+include(":core")
