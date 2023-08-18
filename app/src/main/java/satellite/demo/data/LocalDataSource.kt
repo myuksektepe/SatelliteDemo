@@ -1,7 +1,6 @@
 package satellite.demo.data
 
 import android.content.Context
-import kotlinx.coroutines.flow.Flow
 import satellite.demo.core.Resource
 import satellite.demo.domain.models.Satellite
 import satellite.demo.domain.models.SatelliteDetail

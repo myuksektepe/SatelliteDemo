@@ -11,7 +11,6 @@ import satellite.demo.R
 import satellite.demo.core.Resource
 import satellite.demo.core.base.BaseActivity
 import satellite.demo.databinding.ActivityMainBinding
-import satellite.demo.domain.FlowState
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {

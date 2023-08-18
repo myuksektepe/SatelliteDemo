@@ -4,16 +4,12 @@ import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import satellite.demo.core.Resource
 import satellite.demo.core.base.BaseError
 import satellite.demo.core.extension.getJsonDataFromAsset
 import satellite.demo.domain.models.Satellite
 import satellite.demo.domain.models.SatelliteDetail
 import satellite.demo.domain.models.SatellitePosition
-import java.io.BufferedReader
 import javax.inject.Inject
 
 

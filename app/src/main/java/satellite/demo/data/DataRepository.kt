@@ -1,6 +1,5 @@
 package satellite.demo.data
 
-import kotlinx.coroutines.flow.Flow
 import satellite.demo.core.Resource
 import satellite.demo.domain.models.SatellitePosition
 import satellite.demo.domain.models.Satellite
