@@ -16,6 +16,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onCreate() {
         binding.txt.text = "sdfsdf"
+        viewModel.getSatelliteList()
     }
 
     override fun observeViewModel() {}
