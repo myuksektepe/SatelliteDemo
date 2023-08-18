@@ -5,7 +5,7 @@ import satellite.demo.core.Resource
 import satellite.demo.core.base.BaseUseCase
 import satellite.demo.data.DataRepository
 import satellite.demo.di.IODispatcher
-import satellite.demo.domain.models.Satellite
+import satellite.demo.domain.models.SatelliteDetail
 import javax.inject.Inject
 
 
@@ -14,11 +14,17 @@ import javax.inject.Inject
  * muratyuksektepe.com
  * yuksektepemurat@gmail.com
  */
-class SatelliteUseCase @Inject constructor(
+class SatelliteDetailGetByIdUseCase @Inject constructor(
     private val dataRepository: DataRepository,
     @IODispatcher dispatcher: CoroutineDispatcher
-) : BaseUseCase<Unit, List<Satellite>>(dispatcher) {
+) : BaseUseCase<SatelliteDetailGetByIdUseCase.Params, SatelliteDetail>(dispatcher) {
 
-    override suspend fun execute(params: Unit?): Resource<List<Satellite>> = dataRepository.getSatellites()
+    override suspend fun execute(params: Params?): Resource<SatelliteDetail>? {
+        return params?.id?.let { dataRepository.getSatelliteDetailsById(it) }
+    }
+
+    data class Params(
+        val id: Int
+    )
 
 }

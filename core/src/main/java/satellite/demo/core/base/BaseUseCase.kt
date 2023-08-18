@@ -21,7 +21,7 @@ abstract class BaseUseCase<in P, T> constructor(
             withContext(dispatcher) {
                 flow {
                     emit(Resource.Loading)
-                    emit(execute(params))
+                    execute(params)?.let { emit(it) }
                 }
             }
         } catch (e: Exception) {
@@ -32,5 +32,5 @@ abstract class BaseUseCase<in P, T> constructor(
     }
 
     @Throws(RuntimeException::class)
-    abstract suspend fun execute(params: P?): Resource<T>
+    abstract suspend fun execute(params: P?): Resource<T>?
 }

@@ -21,16 +21,10 @@ class DataRepositoryImpl @Inject constructor(
 
     override suspend fun getSatellites(): Resource<List<Satellite>> = dataSource.getSatellites(context)
 
-    override suspend fun getSatelliteById(id: Int): Resource<Satellite> {
-        return Resource.Success(Satellite(1, null, null))
-    }
+    override suspend fun getSatelliteById(id: Int): Resource<Satellite> = dataSource.getSatelliteById(context, id)
 
-    override suspend fun getSatelliteDetailsById(id: Int): Resource<SatelliteDetail> {
-        return Resource.Success(SatelliteDetail(1, null, null, null, null))
-    }
+    override suspend fun getSatelliteDetailsById(id: Int): Resource<SatelliteDetail> = dataSource.getSatelliteDetailsById(context, id)
 
-    override suspend fun getSatellitePositionsById(id: Int): Resource<List<SatellitePosition>> {
-        return Resource.Success(listOf(SatellitePosition(0.1, 0.3)))
-    }
+    override suspend fun getSatellitePositionsById(id: Int): Resource<List<SatellitePosition>> = dataSource.getSatellitePositionsById(context, id)
 
 }

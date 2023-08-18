@@ -6,7 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import satellite.demo.data.DataRepository
-import satellite.demo.presentation.usecase.SatelliteUseCase
+import satellite.demo.presentation.usecase.SatelliteGetListUseCase
 import javax.inject.Singleton
 
 
@@ -26,5 +26,5 @@ object UseCaseModule {
     fun provideSatelliteUseCase(
         repository: DataRepository,
         @IODispatcher dispatcher: CoroutineDispatcher
-    ) = SatelliteUseCase(repository, dispatcher)
+    ) = SatelliteGetListUseCase(repository, dispatcher)
 }
