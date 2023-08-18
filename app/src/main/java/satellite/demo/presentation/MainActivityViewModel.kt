@@ -1,5 +1,7 @@
 package satellite.demo.presentation
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +35,7 @@ class MainActivityViewModel @Inject constructor(
     private val satellitePositionsByIdUseCase: SatellitePositionsByIdUseCase
 ) : BaseViewModel() {
 
+    // Flow
     private val satelliteListFlow = MutableStateFlow<Resource<List<Satellite>>>(Resource.Loading)
     val satelliteList: StateFlow<Resource<List<Satellite>>> = satelliteListFlow
 
@@ -45,18 +48,34 @@ class MainActivityViewModel @Inject constructor(
     private val satellitePositionsFlow = MutableStateFlow<Resource<List<SatellitePosition>>>(Resource.Loading)
     val satellitePositions: StateFlow<Resource<List<SatellitePosition>>> = satellitePositionsFlow
 
+
+    // LiveData
+    private val satelliteListMLD = MutableLiveData<Resource<List<Satellite>>>()
+    val satelliteListLiveData: LiveData<Resource<List<Satellite>>> get() = satelliteListMLD
+
+    private val satelliteMLD = MutableLiveData<Resource<Satellite>>()
+    val satelliteLiveData: LiveData<Resource<Satellite>> get() = satelliteMLD
+
+    private val satelliteDetailMLD = MutableLiveData<Resource<SatelliteDetail>?>()
+    val satelliteDetailLiveData: LiveData<Resource<SatelliteDetail>?> get() = satelliteDetailMLD
+
+    private val satellitePositionsMLD = MutableLiveData<Resource<List<SatellitePosition>>>()
+    val satellitePositionsLiveData: LiveData<Resource<List<SatellitePosition>>> get() = satellitePositionsMLD
+
     fun getSatelliteList() {
         viewModelScope.launch(Dispatchers.IO) {
-            satelliteGetListUseCase.invoke(Unit).collectLatest {
+            satelliteGetListUseCase.invoke(Unit).collect {
                 satelliteListFlow.value = it
+                satelliteListMLD.postValue(it)
             }
         }
     }
 
     fun getSatelliteById(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            satelliteGetByIdUseCase.invoke(SatelliteGetByIdUseCase.Params(id)).collectLatest {
+            satelliteGetByIdUseCase.invoke(SatelliteGetByIdUseCase.Params(id)).collect {
                 satelliteFlow.value = it
+                satelliteMLD.postValue(it)
             }
         }
     }
@@ -65,6 +84,7 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             satelliteDetailGetByIdUseCase.invoke(SatelliteDetailGetByIdUseCase.Params(id)).collectLatest {
                 satelliteDetailFlow.value = it
+                satelliteDetailMLD.postValue(it)
             }
         }
     }
@@ -73,6 +93,7 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             satellitePositionsByIdUseCase.invoke(SatellitePositionsByIdUseCase.Params(id)).collectLatest {
                 satellitePositionsFlow.value = it
+                satellitePositionsMLD.postValue(it)
             }
         }
     }

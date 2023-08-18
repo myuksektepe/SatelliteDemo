@@ -27,11 +27,54 @@ class MainActivity @Inject constructor(
     override var lifeCycleOwner: LifecycleOwner = this
 
     override fun onCreate() {
-        viewModel.getSatelliteList()
-        //viewModel.getSatelliteDetailById(3)
+        // viewModel.getSatelliteList()
+        viewModel.getSatelliteDetailById(3)
     }
 
     override fun observeViewModel() {
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.satelliteListLiveData.observe(lifeCycleOwner) {
+                    when (it) {
+                        is Resource.Loading -> {
+                            Log.i("applog", "loading for list")
+                        }
+
+                        is Resource.Error -> {
+                            Log.e("applog", "${it.exception}")
+                        }
+
+                        is Resource.Success -> {
+                            Log.i("applog", "${it.data}")
+                        }
+                    }
+                }
+
+
+
+                viewModel.satelliteDetailLiveData.observe(lifeCycleOwner) {
+                    when (it) {
+                        is Resource.Loading -> {
+                            Log.i("applog", "loading for detail")
+                        }
+
+                        is Resource.Error -> {
+                            Log.e("applog", "${it.exception}")
+                        }
+
+                        is Resource.Success -> {
+                            Log.i("applog", "${it.data}")
+                        }
+
+                        else -> {}
+                    }
+                }
+            }
+        }
+
+
+        /*
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
 
@@ -74,5 +117,6 @@ class MainActivity @Inject constructor(
 
             }
         }
+         */
     }
 }
