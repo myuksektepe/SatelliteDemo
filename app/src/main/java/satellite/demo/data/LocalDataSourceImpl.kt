@@ -1,6 +1,7 @@
 package satellite.demo.data
 
 import android.content.Context
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.delay
@@ -30,63 +31,55 @@ class LocalDataSourceImpl @Inject constructor() : LocalDataSource {
     }
 
     override suspend fun getSatellites(context: Context): Resource<List<Satellite>> {
-        var satelliteList: List<Satellite> = listOf()
-        return try {
-            getJsonDataFromAsset(context, satelliteListFile)?.let {
-                val gson = Gson()
-                val listSatelliteType = object : TypeToken<List<Satellite>>() {}.type
-                satelliteList = gson.fromJson(it, listSatelliteType)
-            }
-            delay(1300) // TODO Remove it!
-            Resource.Success(satelliteList)
-        } catch (e: Exception) {
-            Resource.Error(BaseError(e.message))
+        val result = context.getJsonModel<List<Satellite>>(satelliteListFile)
+        return result?.let {
+            Resource.Success(it)
+        } ?: run {
+            Resource.Error(BaseError("Satellite list is not found!"))
         }
-
     }
 
     override suspend fun getSatelliteById(context: Context, id: Int): Resource<Satellite> {
-        var satellite: Satellite? = null
-        return try {
-            getJsonDataFromAsset(context, satelliteDetailsFile)?.let {
-                val gson = Gson()
-                val satelliteType = object : TypeToken<Satellite>() {}.type
-                satellite = gson.fromJson(it, satelliteType)
-            }
-            if (satellite != null) Resource.Success(satellite!!)
-            else Resource.Error(BaseError("Satellite is empty!"))
-        } catch (e: Exception) {
-            Resource.Error(BaseError(e.message))
+        val result = context.getJsonModel<Satellite>(satelliteListFile)
+        return result?.let {
+            Resource.Success(it)
+        } ?: run {
+            Resource.Error(BaseError("Satellite is not found!"))
         }
     }
 
     override suspend fun getSatelliteDetailsById(context: Context, id: Int): Resource<SatelliteDetail> {
-        var satelliteDetail: SatelliteDetail? = null
-        return try {
-            getJsonDataFromAsset(context, satelliteDetailsFile)?.let {
-                val gson = Gson()
-                val satelliteDetailType = object : TypeToken<SatelliteDetail>() {}.type
-                satelliteDetail = gson.fromJson(it, satelliteDetailType)
-            }
-            if (satelliteDetail != null) Resource.Success(satelliteDetail!!)
-            else Resource.Error(BaseError("Satellite Detail is empty!"))
-        } catch (e: Exception) {
-            Resource.Error(BaseError(e.message))
+        val result = context.getJsonModel<SatelliteDetail>(satelliteDetailsFile)
+        return result?.let {
+            Resource.Success(it)
+        } ?: run {
+            Resource.Error(BaseError("Satellite detail is not found!"))
         }
     }
 
     override suspend fun getSatellitePositionsById(context: Context, id: Int): Resource<List<SatellitePosition>> {
-        var satellitePositions: List<SatellitePosition>? = null
-        return try {
-            getJsonDataFromAsset(context, satelliteDetailsFile)?.let {
-                val gson = Gson()
-                val satellitePositionType = object : TypeToken<List<SatellitePosition>>() {}.type
-                satellitePositions = gson.fromJson(it, satellitePositionType)
-            }
-            if (satellitePositions != null) Resource.Success(satellitePositions!!)
-            else Resource.Error(BaseError("Satellite Positions are empty!"))
-        } catch (e: Exception) {
-            Resource.Error(BaseError(e.message))
+        val result = context.getJsonModel<List<SatellitePosition>>(satellitePositionsFile)
+        return result?.let {
+            Resource.Success(it)
+        } ?: run {
+            Resource.Error(BaseError("Satellite detail is not found!"))
         }
+    }
+
+
+    private fun <T> Context.getJsonModel(
+        fileName: String,
+    ): T? {
+        var model: T? = null
+        try {
+            getJsonDataFromAsset(this, fileName)?.let {
+                val gson = Gson()
+                val modelTypeObject = object : TypeToken<T>() {}.type
+                model = gson.fromJson(it, modelTypeObject)
+            }
+        } catch (e: Exception) {
+            Log.e("applog", "${e.message}")
+        }
+        return model
     }
 }

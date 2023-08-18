@@ -21,10 +21,3 @@ fun getJsonDataFromAsset(context: Context, fileName: String): String? {
     }
     return jsonString
 }
-
-private fun readAsset(context: Context, fileName: String): String =
-    context
-        .assets
-        .open(fileName)
-        .bufferedReader()
-        .use(BufferedReader::readText)
