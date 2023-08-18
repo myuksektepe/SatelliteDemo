@@ -27,7 +27,7 @@ class MainActivity @Inject constructor(
     override var lifeCycleOwner: LifecycleOwner = this
 
     override fun onCreate() {
-        // viewModel.getSatelliteList()
+        viewModel.getSatelliteList()
         viewModel.getSatelliteDetailById(3)
     }
 

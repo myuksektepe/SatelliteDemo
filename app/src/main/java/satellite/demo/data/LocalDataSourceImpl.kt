@@ -12,7 +12,6 @@ import satellite.demo.domain.models.Satellite
 import satellite.demo.domain.models.SatelliteDetail
 import satellite.demo.domain.models.SatellitePosition
 import satellite.demo.domain.models.SatellitePositionList
-import java.io.IOException
 import javax.inject.Inject
 
 
@@ -71,7 +70,7 @@ class LocalDataSourceImpl @Inject constructor() : LocalDataSource {
         var result: Resource<SatelliteDetail>? = null
         satelliteDetailList?.let {
             it.find { satelliteDetail -> satelliteDetail.id == id }?.let { satelliteDetail ->
-                delay(1100)
+                delay(3100)
                 result = Resource.Success(satelliteDetail)
             } ?: {
                 result = Resource.Error(BaseError("Satellite id might be wrong"))
