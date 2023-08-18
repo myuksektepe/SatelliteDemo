@@ -1,14 +1,24 @@
 package satellite.demo.presentation
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import satellite.demo.core.Resource
+import satellite.demo.core.base.BaseError
 import satellite.demo.core.base.BaseViewModel
 import satellite.demo.data.DataRepository
 import satellite.demo.data.DataRepositoryImpl
-import satellite.demo.data.LocalDataSource
+import satellite.demo.data.LocalDataSourceImpl
+import satellite.demo.domain.FlowState
+import satellite.demo.domain.models.Satellite
+import satellite.demo.presentation.usecase.SatelliteUseCase
 import javax.inject.Inject
 
 
@@ -20,18 +30,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    @ApplicationContext val context: Context,
-    private var dataRepository: DataRepository,
+    private val satelliteUseCase: SatelliteUseCase
 ) : BaseViewModel() {
 
-    @Inject
-    lateinit var dataSource: LocalDataSource
-
+    private val satelliteListFlow = MutableStateFlow<Resource<List<Satellite>>>(Resource.Loading)
+    val satelliteList: StateFlow<Resource<List<Satellite>>> = satelliteListFlow
 
     fun getSatelliteList() {
-        dataRepository = DataRepositoryImpl(context, dataSource)
-        val list = dataRepository.getSatelliteById()
-        Log.i("applog", "$list")
+        viewModelScope.launch(Dispatchers.IO) {
+            satelliteUseCase.invoke(Unit).collectLatest {
+                satelliteListFlow.value = it
+            }
+        }
     }
-
 }

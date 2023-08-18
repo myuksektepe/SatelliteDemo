@@ -58,6 +58,12 @@ dependencies {
     kapt(Dependencies.hiltCompiler)
     kapt(Dependencies.hiltCompilerX)
 
+    // Gson
+    implementation(Dependencies.gson)
+
+    // Coroutines
+    implementation(Dependencies.coroutines)
+
     // Test
     testImplementation(Dependencies.junitTest)
     androidTestImplementation(Dependencies.junit)

@@ -31,11 +31,11 @@ abstract class BaseActivity<VDB : ViewDataBinding>(private val resLayout: Int) :
             setContentView(mBinding!!.root)
         }
 
-        // Observers
-        observeViewModel()
-
         //
         onCreate()
+
+        // Observers
+        observeViewModel()
     }
 
     private fun initBinding() {

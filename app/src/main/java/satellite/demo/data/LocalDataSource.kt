@@ -1,9 +1,11 @@
 package satellite.demo.data
 
 import android.content.Context
+import kotlinx.coroutines.flow.Flow
+import satellite.demo.core.Resource
 import satellite.demo.domain.models.Satellite
-import java.io.BufferedReader
-import javax.inject.Inject
+import satellite.demo.domain.models.SatelliteDetail
+import satellite.demo.domain.models.SatellitePosition
 
 
 /**
@@ -11,22 +13,9 @@ import javax.inject.Inject
  * muratyuksektepe.com
  * yuksektepemurat@gmail.com
  */
-class LocalDataSource @Inject constructor() {
-
-    companion object {
-        private const val satelliteListFile = "file://android_asset/satellite-list.json"
-        private const val satelliteDetailsFile = "file://android_asset/satellite-details.json"
-        private const val satellitePositionsFile = "file://android_asset/satellite-positions.json"
-    }
-
-    fun getStringFromAssets(context: Context) = readAsset(context, satelliteListFile)
-
-    fun getSatelliteList(context: Context): List<Satellite> = listOf()
-
-    private fun readAsset(context: Context, fileName: String): String =
-        context
-            .assets
-            .open(fileName)
-            .bufferedReader()
-            .use(BufferedReader::readText)
+interface LocalDataSource {
+    suspend fun getSatellites(context: Context): Resource<List<Satellite>>
+    suspend fun getSatelliteById(context: Context, id: Int): Resource<Satellite>
+    suspend fun getSatelliteDetailsById(context: Context, id: Int): Resource<SatelliteDetail>
+    suspend fun getSatellitePositionsById(context: Context, id: Int): Resource<List<SatellitePosition>>
 }

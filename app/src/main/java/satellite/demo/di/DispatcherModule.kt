@@ -1,14 +1,12 @@
 package satellite.demo.di
 
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
-import satellite.demo.data.DataRepository
-import satellite.demo.data.DataRepositoryImpl
+import kotlinx.coroutines.Dispatchers
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 
@@ -18,12 +16,16 @@ import javax.inject.Singleton
  * yuksektepemurat@gmail.com
  */
 
-
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+object DispatcherModule {
 
-    @Binds
-    abstract fun provideRepository(dataRepositoryImpl: DataRepositoryImpl): DataRepository
-
+    @Singleton
+    @Provides
+    @IODispatcher
+    fun provideIODispatcher(): CoroutineDispatcher = Dispatchers.IO
 }
+
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class IODispatcher

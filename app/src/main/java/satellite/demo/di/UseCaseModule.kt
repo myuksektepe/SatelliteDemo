@@ -1,6 +1,5 @@
 package satellite.demo.di
 
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -8,7 +7,7 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import satellite.demo.data.DataRepository
-import satellite.demo.data.DataRepositoryImpl
+import satellite.demo.presentation.usecase.SatelliteUseCase
 import javax.inject.Singleton
 
 
@@ -21,9 +20,12 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+object UseCaseModule {
 
-    @Binds
-    abstract fun provideRepository(dataRepositoryImpl: DataRepositoryImpl): DataRepository
-
+    @Provides
+    @Singleton
+    fun provideSatelliteUseCase(
+        repository: DataRepository,
+        @IODispatcher dispatcher: CoroutineDispatcher
+    ) = SatelliteUseCase(repository, dispatcher)
 }

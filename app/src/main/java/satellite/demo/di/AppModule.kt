@@ -1,12 +1,12 @@
-package satellite.demo
+package satellite.demo.di
 
-import android.app.Application
 import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import satellite.demo.SatelliteApp
 import javax.inject.Singleton
 
 
@@ -17,7 +17,7 @@ import javax.inject.Singleton
  */
 @Module
 @InstallIn(SingletonComponent::class)
-object SatelliteAppModule {
+object AppModule {
 
     @Singleton
     @Provides

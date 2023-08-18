@@ -1,5 +1,7 @@
 package satellite.demo.data
 
+import kotlinx.coroutines.flow.Flow
+import satellite.demo.core.Resource
 import satellite.demo.domain.models.SatellitePosition
 import satellite.demo.domain.models.Satellite
 import satellite.demo.domain.models.SatelliteDetail
@@ -11,8 +13,8 @@ import satellite.demo.domain.models.SatelliteDetail
  * yuksektepemurat@gmail.com
  */
 interface DataRepository {
-    fun getSatellites(): List<Satellite>
-    fun getSatelliteById(): Satellite
-    fun getSatelliteDetailsById(): SatelliteDetail
-    fun getSatellitePositionsById(): List<SatellitePosition>
+    suspend fun getSatellites(): Resource<List<Satellite>>
+    suspend fun getSatelliteById(id: Int): Resource<Satellite>
+    suspend fun getSatelliteDetailsById(id: Int): Resource<SatelliteDetail>
+    suspend fun getSatellitePositionsById(id: Int): Resource<List<SatellitePosition>>
 }
