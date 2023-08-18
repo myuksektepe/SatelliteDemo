@@ -51,8 +51,6 @@ class MainActivity @Inject constructor(
                     }
                 }
 
-
-
                 viewModel.satelliteDetailLiveData.observe(lifeCycleOwner) {
                     when (it) {
                         is Resource.Loading -> {
@@ -73,50 +71,5 @@ class MainActivity @Inject constructor(
             }
         }
 
-
-        /*
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-                viewModel.satelliteList.collectLatest {
-                    when (it) {
-                        is Resource.Loading -> {
-                            Log.i("applog", "loading for list")
-                        }
-
-                        is Resource.Error -> {
-                            Log.e("applog", "${it.exception}")
-                        }
-
-                        is Resource.Success -> {
-                            Log.i("applog", "${it.data}")
-                        }
-                    }
-                }
-
-                /*
-                                viewModel.satelliteDetail.collectLatest {
-                    when (it) {
-                        is Resource.Loading -> {
-                            Log.i("applog", "loading for detail")
-                        }
-
-                        is Resource.Error -> {
-                            Log.e("applog", "${it.exception}")
-                        }
-
-                        is Resource.Success -> {
-                            Log.i("applog", "${it.data}")
-                        }
-
-                        else -> {}
-                    }
-                }
-
-                 */
-
-            }
-        }
-         */
     }
 }
