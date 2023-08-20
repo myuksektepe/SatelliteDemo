@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Satellite Demo</string>
+    <string name="quick_search">Hızlı arama</string>
+    <string name="satellite_list">Uydu Listesi</string>
 </resources>
