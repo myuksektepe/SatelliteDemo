@@ -7,16 +7,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import satellite.demo.R
 import satellite.demo.core.Resource
 import satellite.demo.core.base.BaseActivity
 import satellite.demo.databinding.ActivityMainBinding
-import satellite.demo.di.IODispatcher
+import satellite.demo.domain.models.Satellite
+import satellite.demo.presentation.adapter.SatelliteAdapter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,6 +25,9 @@ class MainActivity @Inject constructor(
 
     override val viewModel: MainActivityViewModel by viewModels()
     override var lifeCycleOwner: LifecycleOwner = this
+    val satelliteAdapter: SatelliteAdapter by lazy {
+        SatelliteAdapter()
+    }
 
     override fun onCreate() {
         viewModel.getSatelliteList()
@@ -35,7 +38,7 @@ class MainActivity @Inject constructor(
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.satelliteListLiveData.observe(lifeCycleOwner) {
+                viewModel.satelliteListLiveData.observe(lifeCycleOwner) { it ->
                     when (it) {
                         is Resource.Loading -> {
                             Log.i("applog", "loading for list")
@@ -47,29 +50,21 @@ class MainActivity @Inject constructor(
 
                         is Resource.Success -> {
                             Log.i("applog", "${it.data}")
+                            setUI(it.data.map { item -> item.toViewEntity() })
                         }
-                    }
-                }
-
-                viewModel.satelliteDetailLiveData.observe(lifeCycleOwner) {
-                    when (it) {
-                        is Resource.Loading -> {
-                            Log.i("applog", "loading for detail")
-                        }
-
-                        is Resource.Error -> {
-                            Log.e("applog", "${it.exception}")
-                        }
-
-                        is Resource.Success -> {
-                            Log.i("applog", "${it.data}")
-                        }
-
-                        else -> {}
                     }
                 }
             }
         }
+    }
 
+
+    private fun setUI(list: List<Satellite.ViewEntity?>) {
+        binding.rcySatellites.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL))
+            adapter = satelliteAdapter
+        }
+        satelliteAdapter.submitList(list)
     }
 }

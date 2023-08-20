@@ -29,10 +29,10 @@
                     android:id="@+id/imgCircle"
                     android:layout_width="@dimen/_24sdp"
                     android:layout_height="@dimen/_24sdp"
+                    android:src="@drawable/ic_circle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@drawable/ic_circle"
                     tools:tint="#E91E63" />
 
                 <TextView

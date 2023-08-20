@@ -2,4 +2,6 @@
     <string name="app_name">Satellite Demo</string>
     <string name="quick_search">Hızlı arama</string>
     <string name="satellite_list">Uydu Listesi</string>
+    <string name="passive">Pasif</string>
+    <string name="active">Aktif</string>
 </resources>

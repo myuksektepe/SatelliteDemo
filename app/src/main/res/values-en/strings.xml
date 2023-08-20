@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Satellite Demo</string>
+    <string name="quick_search">Quick search</string>
+    <string name="satellite_list">Satellite List</string>
+    <string name="passive">Passive</string>
+    <string name="active">Active</string>
+</resources>

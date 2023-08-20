@@ -1,6 +1,7 @@
 package satellite.demo.domain.models
 
 import com.google.gson.annotations.SerializedName
+import satellite.demo.R
 
 
 /**
@@ -17,4 +18,22 @@ data class Satellite(
 
     @SerializedName("name")
     val name: String?
-)
+) {
+
+
+    data class ViewEntity(
+        val id: Int,
+        val activityColor: Int,
+        val activeStatus: String,
+        val name: String
+    )
+
+    fun toViewEntity() = this.name?.let {
+        ViewEntity(
+            id = this.id,
+            activityColor = if (this.active == true) R.color.active else R.color.passive,
+            activeStatus = if (this.active == true) "Active" else "Passive",
+            name = it
+        )
+    }
+}
