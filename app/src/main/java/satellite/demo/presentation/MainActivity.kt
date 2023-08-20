@@ -1,6 +1,7 @@
 package satellite.demo.presentation
 
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Lifecycle
@@ -85,5 +86,8 @@ class MainActivity @Inject constructor(
         }
     }
 
-    private fun toggleLoading(show: Boolean) = viewModel.loadingVisibility.set(show)
+    private fun toggleLoading(show: Boolean) {
+        binding.frmLoading.visibility = if (show) View.VISIBLE else View.GONE
+        //viewModel.loadingVisibility.set(show)
+    }
 }

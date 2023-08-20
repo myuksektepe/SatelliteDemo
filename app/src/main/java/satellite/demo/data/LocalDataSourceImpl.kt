@@ -33,7 +33,7 @@ class LocalDataSourceImpl @Inject constructor() : LocalDataSource {
 
         val result = context.getJsonModel<List<Satellite>>(satelliteListFile)
         return result?.let {
-            delay(1300)
+            delay(3500)
             Resource.Success(it)
         } ?: run {
             Resource.Error(BaseError("Satellite list is not found!"))
