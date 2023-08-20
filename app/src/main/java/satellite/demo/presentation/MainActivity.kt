@@ -1,8 +1,8 @@
 package satellite.demo.presentation
 
-
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -25,13 +25,12 @@ class MainActivity @Inject constructor(
 
     override val viewModel: MainActivityViewModel by viewModels()
     override var lifeCycleOwner: LifecycleOwner = this
-    val satelliteAdapter: SatelliteAdapter by lazy {
+    private val satelliteAdapter: SatelliteAdapter by lazy {
         SatelliteAdapter()
     }
 
     override fun onCreate() {
         viewModel.getSatelliteList()
-        viewModel.getSatelliteDetailById(3)
     }
 
     override fun observeViewModel() {
@@ -42,15 +41,25 @@ class MainActivity @Inject constructor(
                     when (it) {
                         is Resource.Loading -> {
                             Log.i("applog", "loading for list")
+                            toggleLoading(true)
+                            // binding.frmLoading.visibility = View.VISIBLE
                         }
 
                         is Resource.Error -> {
                             Log.e("applog", "${it.exception}")
+                            toggleLoading(false)
                         }
 
                         is Resource.Success -> {
                             Log.i("applog", "${it.data}")
-                            setUI(it.data.map { item -> item.toViewEntity() })
+                            toggleLoading(false)
+                            val latestList = mutableListOf<Satellite.ViewEntity>()
+                            it.data.forEach { item ->
+                                item.toViewEntity()?.let {
+                                    latestList.add(it)
+                                }
+                            }
+                            if (latestList.size > 0) setUI(latestList)
                         }
                     }
                 }
@@ -59,12 +68,22 @@ class MainActivity @Inject constructor(
     }
 
 
-    private fun setUI(list: List<Satellite.ViewEntity?>) {
+    private fun setUI(list: List<Satellite.ViewEntity>) {
+        // RecyclerView
         binding.rcySatellites.apply {
             layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL))
             adapter = satelliteAdapter
         }
-        satelliteAdapter.submitList(list)
+
+        // Adapter
+        satelliteAdapter.setList(list)
+
+        // Search
+        binding.edtSearch.addTextChangedListener {
+            satelliteAdapter.filter.filter(it.toString())
+        }
     }
+
+    private fun toggleLoading(show: Boolean) = viewModel.loadingVisibility.set(show)
 }

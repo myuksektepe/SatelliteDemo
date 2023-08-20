@@ -1,5 +1,6 @@
 package satellite.demo.presentation
 
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -46,6 +47,8 @@ class MainActivityViewModel @Inject constructor(
 
     private val satellitePositionsMLD = MutableLiveData<Resource<List<SatellitePosition>>>()
     val satellitePositionsLiveData: LiveData<Resource<List<SatellitePosition>>> get() = satellitePositionsMLD
+
+    val loadingVisibility = ObservableBoolean()
 
     fun getSatelliteList() {
         viewModelScope.launch(Dispatchers.IO) {

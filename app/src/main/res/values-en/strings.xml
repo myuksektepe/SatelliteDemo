@@ -4,4 +4,5 @@
     <string name="satellite_list">Satellite List</string>
     <string name="passive">Passive</string>
     <string name="active">Active</string>
+    <string name="loading">Loading…\nPlease wait.</string>
 </resources>
